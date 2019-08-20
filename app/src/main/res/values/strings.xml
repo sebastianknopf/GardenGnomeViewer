@@ -1,3 +1,12 @@
 <resources>
+
     <string name="app_name">GardenGnome Viewer</string>
+
+    <!-- Default Strings -->
+
+    <!-- MainActivity -->
+    <string name="activity_main_storage_request_title">Berechtigungsfehler</string>
+    <string name="activity_main_storage_request_text">GardenGnome Viewer benötigt die Berechtigung zum Lesen des externen Speichers, um GGPKG-Dateien auf Deinem Gerät zu finden!\n\nWenn Du diese Berechtigung nicht gewährst, kann die App nicht in vollem Umfang genutzt werden.</string>
+    <string name="activity_main_storage_request_button">Zugriff gewähren</string>
+
 </resources>
