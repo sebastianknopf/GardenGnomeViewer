@@ -1,8 +1,8 @@
 package com.ggnome.viewer;
 
-import android.databinding.DataBindingUtil;
+import androidx.databinding.DataBindingUtil;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Toast;
 
@@ -33,12 +33,16 @@ public class ViewerActivity extends AppCompatActivity {
 
                     File internalStorage = this.getCacheDir();
                     this.gardenGnomePackage.open(internalStorage.getAbsolutePath());
-                    Toast.makeText(this, "Ready", Toast.LENGTH_LONG).show();
+                    this.showViewerPanel();
                 } catch(IOException e) {
                     Toast.makeText(this, e.getMessage(), Toast.LENGTH_LONG).show();
                 }
             }
         }
+
+
+        this.activityViewerBinding.viewerPanel.getSettings().setJavaScriptEnabled(true);
+        this.activityViewerBinding.viewerPanel.loadUrl("https://output.sebastian-knopf.de/");
     }
 
     @Override
