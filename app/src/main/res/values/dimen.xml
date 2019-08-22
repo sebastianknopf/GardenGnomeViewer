@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <dimen name="activity_vertical_spacing">16dp</dimen>
+    <dimen name="activity_horizontal_spacing">16dp</dimen>
+    <dimen name="activity_default_spacing">16dp</dimen>
+
+</resources>
