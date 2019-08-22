@@ -31,7 +31,7 @@ public final class CacheCleanerTask extends AsyncTask<String, Void, Void> {
         // in non-strict mode delete only those files, which
         // are NOT contained in the passed package file names
         if(this.strictMode) {
-            File cacheDirectory = this.context.getCacheDir();
+            File cacheDirectory = new File(this.context.getCacheDir(), "preview");
             for(File cachedFile : cacheDirectory.listFiles()) {
                 cachedFile.delete();
             }

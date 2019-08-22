@@ -81,10 +81,8 @@ public final class GardenGnomePackage implements Closeable {
     @Override
     public void close() {
         if(this.isOpen) {
-            File cleanDirectory = new File(this.packageDirectory);
-            cleanDirectory.setReadable(true);
-
-            this.cleanUpDirectory(cleanDirectory, false);
+            File cleanDirectory = new File(this.packageDirectory, "ggpkg");
+            this.cleanUpDirectory(cleanDirectory);
 
             this.packageDirectory = null;
             this.isOpen = false;
@@ -100,11 +98,10 @@ public final class GardenGnomePackage implements Closeable {
     public void open(String packageDirectory) throws IOException {
         this.packageDirectory = packageDirectory;
 
-        File tmp = new File(this.packageDirectory);
-        if(!tmp.exists()) {
-            tmp.mkdirs();
+        File targetDirectory = new File(this.packageDirectory, "ggpkg");
+        if(!targetDirectory.exists()) {
+            targetDirectory.mkdirs();
         }
-        tmp.setReadOnly();
 
         ZipInputStream zipInputStream = new ZipInputStream(new BufferedInputStream(new FileInputStream(this.packageFileName)));
         ZipEntry zipEntry;
@@ -116,12 +113,12 @@ public final class GardenGnomePackage implements Closeable {
             String filename = zipEntry.getName();
 
             if(zipEntry.isDirectory()) {
-                File directory = new File(this.packageDirectory, filename);
+                File directory = new File(targetDirectory, filename);
                 directory.mkdirs();
                 continue;
             }
 
-            File outputFile = new File(this.packageDirectory, filename);
+            File outputFile = new File(targetDirectory, filename);
             if(!outputFile.getParentFile().exists()) {
                 outputFile.getParentFile().mkdirs();
             }
@@ -255,17 +252,15 @@ public final class GardenGnomePackage implements Closeable {
      *
      * @param startDirectory The directory to handle.
      */
-    private void cleanUpDirectory(File startDirectory, boolean deleteStartDirectory) {
+    private void cleanUpDirectory(File startDirectory) {
         for(File object : startDirectory.listFiles()) {
             if(object.isDirectory()) {
-                this.cleanUpDirectory(object, true);
+                this.cleanUpDirectory(object);
             } else {
                 object.delete();
             }
         }
 
-        if(deleteStartDirectory) {
-            startDirectory.delete();
-        }
+        startDirectory.delete();
     }
 }

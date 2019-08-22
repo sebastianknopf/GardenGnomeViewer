@@ -39,7 +39,7 @@ public class PreviewLoaderTask extends AsyncTask<String, Void, Bitmap> {
         // try to load preview image from cache
         // load from package only if there's no cached image
         String fileName = this.getFileNameWithoutExtension(packageFileName[0]);
-        File cachedPreviewImage = new File(this.context.getCacheDir(), fileName + ".jpg");
+        File cachedPreviewImage = new File(new File(this.context.getCacheDir(), "preview"), fileName + ".jpg");
         if(cachedPreviewImage.exists()) {
             resultBitmap = BitmapFactory.decodeFile(cachedPreviewImage.getAbsolutePath());
             return resultBitmap;
@@ -59,6 +59,10 @@ public class PreviewLoaderTask extends AsyncTask<String, Void, Bitmap> {
 
                     options.inJustDecodeBounds = false;
                     resultBitmap = BitmapFactory.decodeByteArray(previewImageData, 0, previewImageData.length, options);
+
+                    if(!cachedPreviewImage.getParentFile().exists()) {
+                        cachedPreviewImage.getParentFile().mkdirs();
+                    }
 
                     FileOutputStream cacheOutputStream = new FileOutputStream(cachedPreviewImage);
                     resultBitmap.compress(Bitmap.CompressFormat.JPEG, 90, cacheOutputStream);

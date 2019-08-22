@@ -15,11 +15,9 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.view.View;
-import android.widget.Toast;
 
 import com.ggnome.viewer.adapter.GridPreviewAdapter;
 import com.ggnome.viewer.databinding.ActivityMainBinding;
-import com.ggnome.viewer.task.CacheCleanerTask;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -63,8 +61,8 @@ public class MainActivity extends AppCompatActivity implements GridPreviewAdapte
     protected void onStop() {
         super.onStop();
 
-        CacheCleanerTask cacheCleanerTask = new CacheCleanerTask(this, !CONFIG_CACHE_IMAGES);
-        cacheCleanerTask.execute(this.listToArray(this.packageFileNames));
+        /*CacheCleanerTask cacheCleanerTask = new CacheCleanerTask(this, !CONFIG_CACHE_IMAGES);
+        cacheCleanerTask.execute(this.listToArray(this.packageFileNames));*/
     }
 
     @Override
@@ -81,7 +79,10 @@ public class MainActivity extends AppCompatActivity implements GridPreviewAdapte
     // event handler
     @Override
     public void onItemClick(int position, String packageFileName) {
-        Toast.makeText(this, String.valueOf(position), Toast.LENGTH_SHORT).show();
+        Intent intent = new Intent(this, ViewerActivity.class);
+        intent.putExtra("EXTRA_PACKAGE_FILE_NAME", packageFileName);
+
+        this.startActivity(intent);
     }
 
     // event handler
@@ -121,6 +122,7 @@ public class MainActivity extends AppCompatActivity implements GridPreviewAdapte
             this.showPermissionErrorPanel();
         } else {
             this.showGridPreviewPanel();
+            this.loadPackageNames();
         }
     }
 
