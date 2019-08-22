@@ -84,7 +84,7 @@ public final class GardenGnomePackage implements Closeable {
             File cleanDirectory = new File(this.packageDirectory);
             cleanDirectory.setReadable(true);
 
-            this.cleanUpDirectory(cleanDirectory);
+            this.cleanUpDirectory(cleanDirectory, false);
 
             this.packageDirectory = null;
             this.isOpen = false;
@@ -116,12 +116,12 @@ public final class GardenGnomePackage implements Closeable {
             String filename = zipEntry.getName();
 
             if(zipEntry.isDirectory()) {
-                File directory = new File(this.packageDirectory + filename);
+                File directory = new File(this.packageDirectory, filename);
                 directory.mkdirs();
                 continue;
             }
 
-            File outputFile = new File(this.packageDirectory + filename);
+            File outputFile = new File(this.packageDirectory, filename);
             if(!outputFile.getParentFile().exists()) {
                 outputFile.getParentFile().mkdirs();
             }
@@ -255,15 +255,17 @@ public final class GardenGnomePackage implements Closeable {
      *
      * @param startDirectory The directory to handle.
      */
-    private void cleanUpDirectory(File startDirectory) {
+    private void cleanUpDirectory(File startDirectory, boolean deleteStartDirectory) {
         for(File object : startDirectory.listFiles()) {
             if(object.isDirectory()) {
-                this.cleanUpDirectory(object);
+                this.cleanUpDirectory(object, true);
             } else {
                 object.delete();
             }
         }
 
-        startDirectory.delete();
+        if(deleteStartDirectory) {
+            startDirectory.delete();
+        }
     }
 }
