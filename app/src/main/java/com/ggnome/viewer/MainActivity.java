@@ -13,6 +13,7 @@ import android.view.View;
 
 import com.ggnome.viewer.adapter.GridPreviewAdapter;
 import com.ggnome.viewer.databinding.ActivityMainBinding;
+import com.ggnome.viewer.view.GridViewItemSpacingDecoration;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,6 +44,7 @@ public class MainActivity extends AppCompatActivity implements GridPreviewAdapte
 
         int spanCount = 1;
         this.activityMainBinding.contentPreviewPanel.setLayoutManager(new GridLayoutManager(this, spanCount));
+        this.activityMainBinding.contentPreviewPanel.addItemDecoration(new GridViewItemSpacingDecoration(spanCount, 16));
         this.activityMainBinding.contentPreviewPanel.setAdapter(this.gridPreviewAdapter);
     }
 
