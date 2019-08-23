@@ -17,18 +17,18 @@ import java.io.IOException;
 public class PreviewLoaderTask extends AsyncTask<String, Void, Bitmap> {
 
     private Context context;
-    private PreviewLoadingTaskListener loadingTaskListener;
+    private PreviewLoaderTaskListener loadingTaskListener;
 
     public PreviewLoaderTask(Context context) {
         this.context = context;
     }
 
     /**
-     * Apply PreviewLoadingTaskListener object to react on loading finish event.
+     * Apply PreviewLoaderTaskListener object to react on loading finish event.
      *
      * @param loadingTaskListener The listener object.
      */
-    public void setLoadingTaskListener(PreviewLoadingTaskListener loadingTaskListener) {
+    public void setLoaderTaskListener(PreviewLoaderTaskListener loadingTaskListener) {
         this.loadingTaskListener = loadingTaskListener;
     }
 
@@ -130,7 +130,7 @@ public class PreviewLoaderTask extends AsyncTask<String, Void, Bitmap> {
     /**
      * Interface for reacting when preview loading has finished.
      */
-    public interface PreviewLoadingTaskListener {
+    public interface PreviewLoaderTaskListener {
 
         void onPreviewLoaded(Bitmap previewList);
 

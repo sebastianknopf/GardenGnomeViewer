@@ -1,10 +1,8 @@
 package com.ggnome.viewer.adapter;
 
 import android.content.Context;
-import androidx.databinding.DataBindingUtil;
 import android.graphics.Bitmap;
 import android.graphics.Color;
-import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +14,9 @@ import com.ggnome.viewer.task.PreviewLoaderTask;
 
 import java.io.File;
 import java.util.List;
+
+import androidx.databinding.DataBindingUtil;
+import androidx.recyclerview.widget.RecyclerView;
 
 /**
  * Grid adapter for displaying preview images and text.
@@ -43,7 +44,7 @@ public final class GridPreviewAdapter extends RecyclerView.Adapter<RecyclerView.
         final GridPreviewItemHolder viewHolder = (GridPreviewItemHolder) holder;
 
         PreviewLoaderTask previewLoaderTask = new PreviewLoaderTask(this.context);
-        previewLoaderTask.setLoadingTaskListener(new PreviewLoaderTask.PreviewLoadingTaskListener() {
+        previewLoaderTask.setLoaderTaskListener(new PreviewLoaderTask.PreviewLoaderTaskListener() {
             @Override
             public void onPreviewLoaded(Bitmap bitmap) {
                 viewHolder.gridPreviewItemBinding.imgPreviewImage.setImageBitmap(bitmap);
