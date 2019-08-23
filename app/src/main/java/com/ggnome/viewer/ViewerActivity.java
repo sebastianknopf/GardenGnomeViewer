@@ -38,7 +38,7 @@ public class ViewerActivity extends AppCompatActivity {
         this.activityViewerBinding = DataBindingUtil.setContentView(this, R.layout.activity_viewer);
 
         if(this.getIntent() != null) {
-            String packageFileName = this.getIntent().getStringExtra(EXTRA_PACKAGE_FILE_NAME);
+            String packageFileName = this.getIntent().getData().getPath();
             if(packageFileName != null) {
                 this.packageLoaderTask = new PackageLoaderTask(this);
                 this.packageLoaderTask.setLoaderTaskListener(new PackageLoaderTask.PackageLoaderTaskListener() {
