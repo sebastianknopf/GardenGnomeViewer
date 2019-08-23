@@ -10,7 +10,42 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/contentPreviewPanel"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"
+            android:visibility="gone" />
+
+        <LinearLayout
+            android:id="@+id/contentEmptyView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:padding="@dimen/activity_default_spacing"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <ImageView
+                android:layout_width="@dimen/activity_app_icon"
+                android:layout_height="@dimen/activity_app_icon"
+                android:layout_gravity="center"
+                android:src="@drawable/gdroid_search" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="32dp"
+                android:layout_gravity="center"
+                android:textAppearance="@style/TextAppearance.AppCompat.Title"
+                android:textColor="@color/colorAccent"
+                android:text="@string/str_sorry" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/activity_vertical_spacing"
+                android:gravity="center"
+                android:text="@string/activity_main_empty_text" />
+
+
+        </LinearLayout>
 
         <RelativeLayout
             android:id="@+id/permissionErrorPanel"

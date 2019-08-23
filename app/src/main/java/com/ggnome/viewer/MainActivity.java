@@ -5,15 +5,10 @@ import android.content.ContentResolver;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
-import androidx.databinding.DataBindingUtil;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import androidx.annotation.NonNull;
-import androidx.core.content.ContextCompat;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.GridLayoutManager;
 import android.view.View;
 
 import com.ggnome.viewer.adapter.GridPreviewAdapter;
@@ -21,6 +16,12 @@ import com.ggnome.viewer.databinding.ActivityMainBinding;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
+import androidx.databinding.DataBindingUtil;
+import androidx.recyclerview.widget.GridLayoutManager;
 
 public class MainActivity extends AppCompatActivity implements GridPreviewAdapter.OnItemClickListener {
 
@@ -52,9 +53,7 @@ public class MainActivity extends AppCompatActivity implements GridPreviewAdapte
     protected void onStart() {
         super.onStart();
 
-        this.checkAndRequestPermissions();
-
-        this.loadPackageNames();
+        this.initializeActivityView();
     }
 
     @Override
@@ -72,7 +71,7 @@ public class MainActivity extends AppCompatActivity implements GridPreviewAdapte
                 this.showPermissionErrorPanel();
             }
         } else {
-            this.checkAndRequestPermissions();
+            this.initializeActivityView();
         }
     }
 
@@ -88,7 +87,7 @@ public class MainActivity extends AppCompatActivity implements GridPreviewAdapte
     // event handler
     public void btnGrantPermissionClick(View view) {
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && this.shouldShowRequestPermissionRationale(Manifest.permission.READ_EXTERNAL_STORAGE)) {
-            this.checkAndRequestPermissions();
+            this.initializeActivityView();
         } else {
             this.startActivity(new Intent(android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS, Uri.parse("package:" + BuildConfig.APPLICATION_ID)));
         }
@@ -99,6 +98,16 @@ public class MainActivity extends AppCompatActivity implements GridPreviewAdapte
      */
     private void showPermissionErrorPanel() {
         this.activityMainBinding.permissionErrorPanel.setVisibility(View.VISIBLE);
+        this.activityMainBinding.contentEmptyView.setVisibility(View.GONE);
+        this.activityMainBinding.contentPreviewPanel.setVisibility(View.GONE);
+    }
+
+    /**
+     * Display empty panel.
+     */
+    private void showEmptyPanel() {
+        this.activityMainBinding.permissionErrorPanel.setVisibility(View.GONE);
+        this.activityMainBinding.contentEmptyView.setVisibility(View.VISIBLE);
         this.activityMainBinding.contentPreviewPanel.setVisibility(View.GONE);
     }
 
@@ -107,13 +116,14 @@ public class MainActivity extends AppCompatActivity implements GridPreviewAdapte
      */
     private void showGridPreviewPanel() {
         this.activityMainBinding.permissionErrorPanel.setVisibility(View.GONE);
+        this.activityMainBinding.contentEmptyView.setVisibility(View.GONE);
         this.activityMainBinding.contentPreviewPanel.setVisibility(View.VISIBLE);
     }
 
     /**
-     * Check required permissions and request not granted permissions if needed.
+     * Check required permissions and initializes the app view.
      */
-    private void checkAndRequestPermissions() {
+    private void initializeActivityView() {
         if(ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
             if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 this.requestPermissions(new String[] {Manifest.permission.READ_EXTERNAL_STORAGE}, PERMISSION_READ_EXTERNAL_STORAGE);
@@ -121,15 +131,18 @@ public class MainActivity extends AppCompatActivity implements GridPreviewAdapte
 
             this.showPermissionErrorPanel();
         } else {
-            this.showGridPreviewPanel();
-            this.loadPackageNames();
+            if(this.loadPackageNames()) {
+                this.showGridPreviewPanel();
+            } else {
+                this.showEmptyPanel();
+            }
         }
     }
 
     /**
      * Loads all available GGPKG's from MediaStore and provides them in a list.
      */
-    private void loadPackageNames() {
+    private boolean loadPackageNames() {
         if(ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
             ContentResolver contentResolver = this.getContentResolver();
             Uri contentUri = MediaStore.Files.getContentUri("external");
@@ -148,8 +161,11 @@ public class MainActivity extends AppCompatActivity implements GridPreviewAdapte
                 }
 
                 this.gridPreviewAdapter.notifyDataSetChanged();
+                return true;
             }
         }
+
+        return false;
     }
 
     /**

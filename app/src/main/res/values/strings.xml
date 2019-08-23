@@ -4,12 +4,14 @@
 
     <!-- Default Strings -->
     <string name="str_back">Zurück</string>
+    <string name="str_sorry">Sorry!</string>
     <string name="str_percent">%d %%</string>
 
     <!-- MainActivity -->
     <string name="activity_main_storage_request_title">Berechtigungsfehler</string>
     <string name="activity_main_storage_request_text">GardenGnome Viewer benötigt die Berechtigung zum Lesen des externen Speichers, um GGPKG-Dateien auf Deinem Gerät zu finden!\n\nWenn Du diese Berechtigung nicht gewährst, kann die App nicht in vollem Umfang genutzt werden.</string>
     <string name="activity_main_storage_request_button">Zugriff gewähren</string>
+    <string name="activity_main_empty_text">Leider konnten wir auf Deinem Gerät keine passenden Dateien finden.</string>
 
     <!-- ViewerActivity -->
     <string name="activity_viewer_menu_fullscreen_title">Fullscreen</string>
