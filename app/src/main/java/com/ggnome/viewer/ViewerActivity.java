@@ -206,9 +206,15 @@ public class ViewerActivity extends AppCompatActivity {
         this.isFullscreenMode = false;
     }
 
+    /**
+     * Updates the progress in progress bar and text view.
+     *
+     * @param progress The current progress to display.
+     */
     private void updateProgress(int progress) {
         String updateText = this.getResources().getString(R.string.str_percent, progress);
         this.activityViewerBinding.lblLoadingProgress.setText(updateText);
+        this.activityViewerBinding.pgbLoading.setProgress(progress);
     }
 
 }

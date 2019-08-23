@@ -14,6 +14,7 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.StringReader;
+import java.nio.channels.FileChannel;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.zip.ZipEntry;
@@ -47,6 +48,7 @@ public final class GardenGnomePackage implements Closeable {
     private boolean isOpen;
 
     // required meta data
+    private boolean metaLoaded = false;
     private String metaContentType, metaPreviewName, metaConfigName;
 
     /**
@@ -62,16 +64,6 @@ public final class GardenGnomePackage implements Closeable {
         File packageFile = new File(this.packageFileName);
         if(!packageFile.exists()) {
             throw new RuntimeException("unable to read ggpkg");
-        }
-
-        try {
-            JSONObject ggInfo = new JSONObject(new String(this.unpackSingleFile("gginfo.json")));
-
-            this.metaContentType = ggInfo.getString("type");
-            this.metaConfigName = ggInfo.getString("configuration");
-            this.metaPreviewName = ggInfo.getJSONObject("preview").getString("img");
-        } catch (Exception e) {
-            throw new RuntimeException("unable to read gginfo");
         }
     }
 
@@ -96,6 +88,17 @@ public final class GardenGnomePackage implements Closeable {
      * @throws IOException When the package file could not be read.
      */
     public void open(String packageDirectory) throws IOException {
+        this.open(packageDirectory, null);
+    }
+
+    /**
+     * Unpacks the package file to a specified target path and returns the current progress via OpenProgressListener.
+     *
+     * @param packageDirectory The directory to unpack the archive file.
+     * @param progressListener The listener to return the progress.
+     * @throws IOException When the package file could not be read.
+     */
+    public void open(String packageDirectory, OpenProgressListener progressListener) throws IOException {
         this.packageDirectory = packageDirectory;
 
         File targetDirectory = new File(this.packageDirectory, "ggpkg");
@@ -103,10 +106,13 @@ public final class GardenGnomePackage implements Closeable {
             targetDirectory.mkdirs();
         }
 
-        ZipInputStream zipInputStream = new ZipInputStream(new BufferedInputStream(new FileInputStream(this.packageFileName)));
+        File packageFile = new File(this.packageFileName);
+        FileInputStream fileInputStream = new FileInputStream(packageFile);
+        FileChannel fileChannel = fileInputStream.getChannel();
+        ZipInputStream zipInputStream = new ZipInputStream(new BufferedInputStream(fileInputStream));
         ZipEntry zipEntry;
 
-        byte[] buffer = new byte[1024];
+        byte[] buffer = new byte[8192];
         int count;
 
         while((zipEntry = zipInputStream.getNextEntry()) != null) {
@@ -126,6 +132,13 @@ public final class GardenGnomePackage implements Closeable {
             FileOutputStream outputStream = new FileOutputStream(outputFile);
             while((count = zipInputStream.read(buffer)) != -1) {
                 outputStream.write(buffer, 0, count);
+
+                long packageSize = packageFile.length();
+                long channelPosition = fileChannel.position();
+
+                if(progressListener != null) {
+                    progressListener.onOpenProgressUpdated((int)(((double)channelPosition / (double)packageSize) * 100.0));
+                }
             }
 
             outputStream.close();
@@ -142,6 +155,8 @@ public final class GardenGnomePackage implements Closeable {
      * @throws IOException When the package file could not be read.
      */
     public byte[] getPreviewImageData() throws IOException {
+        this.loadGGInfo();
+
         return this.unpackSingleFile(this.metaPreviewName);
     }
 
@@ -153,6 +168,8 @@ public final class GardenGnomePackage implements Closeable {
      * @throws IOException When the package file could not be read.
      */
     public Map<String, String> getMetaData() throws IOException {
+        this.loadGGInfo();
+
         byte[] configXml = this.unpackSingleFile(this.metaConfigName);
         String configXmlString = new String(configXml);
 
@@ -209,6 +226,27 @@ public final class GardenGnomePackage implements Closeable {
     }
 
     /**
+     * Loads meta data from gginfo.json file.
+     */
+    private void loadGGInfo() {
+        if(this.metaLoaded) {
+            return;
+        }
+
+        try {
+            JSONObject ggInfo = new JSONObject(new String(this.unpackSingleFile("gginfo.json")));
+
+            this.metaContentType = ggInfo.getString("type");
+            this.metaConfigName = ggInfo.getString("configuration");
+            this.metaPreviewName = ggInfo.getJSONObject("preview").getString("img");
+        } catch (Exception e) {
+            throw new RuntimeException("unable to read gginfo");
+        }
+
+        this.metaLoaded = true;
+    }
+
+    /**
      * Unpack a single file and return it's content as byte array. If the file could not be found
      * within the current package, null is returned.
      *
@@ -224,7 +262,7 @@ public final class GardenGnomePackage implements Closeable {
         ZipInputStream zipInputStream = new ZipInputStream(new BufferedInputStream(new FileInputStream(this.packageFileName)));
         ZipEntry zipEntry;
 
-        byte[] buffer = new byte[1024];
+        byte[] buffer = new byte[8192];
         int count;
 
         while((zipEntry = zipInputStream.getNextEntry()) != null) {
@@ -262,5 +300,14 @@ public final class GardenGnomePackage implements Closeable {
         }
 
         startDirectory.delete();
+    }
+
+    /**
+     * Interface for delivering the current unpacking process.
+     */
+    public interface OpenProgressListener {
+
+        void onOpenProgressUpdated(int progress);
+
     }
 }

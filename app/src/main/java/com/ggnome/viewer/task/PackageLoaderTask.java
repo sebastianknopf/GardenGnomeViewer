@@ -23,10 +23,12 @@ public class PackageLoaderTask extends AsyncTask<String, Integer, GardenGnomePac
             this.publishProgress(0);
 
             GardenGnomePackage gardenGnomePackage = new GardenGnomePackage(packageFileNames[0]);
-            this.publishProgress(40);
-
-            gardenGnomePackage.open(this.context.getCacheDir().getAbsolutePath());
-            this.publishProgress(100);
+            gardenGnomePackage.open(this.context.getCacheDir().getAbsolutePath(), new GardenGnomePackage.OpenProgressListener() {
+                @Override
+                public void onOpenProgressUpdated(int progress) {
+                    publishProgress(progress);
+                }
+            });
 
             return gardenGnomePackage;
         } catch (Exception e) {
