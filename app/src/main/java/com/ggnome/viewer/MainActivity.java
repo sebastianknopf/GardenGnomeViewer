@@ -25,9 +25,6 @@ import androidx.recyclerview.widget.GridLayoutManager;
 
 public class MainActivity extends AppCompatActivity implements GridPreviewAdapter.OnItemClickListener {
 
-    // TODO: remove this for release ...
-    private static boolean CONFIG_CACHE_IMAGES = true;
-
     private static int PERMISSION_READ_EXTERNAL_STORAGE = 0;
 
     private ActivityMainBinding activityMainBinding;
@@ -67,9 +64,7 @@ public class MainActivity extends AppCompatActivity implements GridPreviewAdapte
     @Override
     public void onRequestPermissionsResult(final int requestCode, final @NonNull String[] permissions, @NonNull int[] grantResults) {
         if(grantResults.length < 1 || grantResults[0] != PackageManager.PERMISSION_GRANTED) {
-            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && this.shouldShowRequestPermissionRationale(Manifest.permission.READ_EXTERNAL_STORAGE)) {
-                this.showPermissionErrorPanel();
-            }
+            this.showPermissionErrorPanel();
         } else {
             this.initializeActivityView();
         }
@@ -87,7 +82,9 @@ public class MainActivity extends AppCompatActivity implements GridPreviewAdapte
     // event handler
     public void btnGrantPermissionClick(View view) {
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && this.shouldShowRequestPermissionRationale(Manifest.permission.READ_EXTERNAL_STORAGE)) {
-            this.initializeActivityView();
+            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                this.requestPermissions(new String[] {Manifest.permission.READ_EXTERNAL_STORAGE}, PERMISSION_READ_EXTERNAL_STORAGE);
+            }
         } else {
             this.startActivity(new Intent(android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS, Uri.parse("package:" + BuildConfig.APPLICATION_ID)));
         }
@@ -125,9 +122,6 @@ public class MainActivity extends AppCompatActivity implements GridPreviewAdapte
      */
     private void initializeActivityView() {
         if(ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                this.requestPermissions(new String[] {Manifest.permission.READ_EXTERNAL_STORAGE}, PERMISSION_READ_EXTERNAL_STORAGE);
-            }
 
             this.showPermissionErrorPanel();
         } else {
@@ -168,19 +162,4 @@ public class MainActivity extends AppCompatActivity implements GridPreviewAdapte
         return false;
     }
 
-    /**
-     * Converts a list of Strings to an array.
-     *
-     * @param stringList The String input list.
-     * @return The output array.
-     */
-    private String[] listToArray(List<String> stringList) {
-        String[] resultArray = new String[stringList.size()];
-
-        for(int s = 0; s < stringList.size(); s++) {
-            resultArray[s] = stringList.get(s);
-        }
-
-        return resultArray;
-    }
 }
