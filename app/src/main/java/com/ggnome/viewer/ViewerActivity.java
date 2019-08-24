@@ -24,8 +24,6 @@ import androidx.webkit.WebViewAssetLoader;
 
 public class ViewerActivity extends AppCompatActivity {
 
-    public static String EXTRA_PACKAGE_FILE_NAME = "EXTRA_PACKAGE_FILE_NAME";
-
     private ActivityViewerBinding activityViewerBinding;
 
     private PackageLoaderTask packageLoaderTask;
