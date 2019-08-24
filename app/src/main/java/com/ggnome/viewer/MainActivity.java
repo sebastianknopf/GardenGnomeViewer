@@ -9,6 +9,9 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 
 import com.ggnome.viewer.adapter.GridPreviewAdapter;
@@ -64,6 +67,26 @@ public class MainActivity extends AppCompatActivity implements GridPreviewAdapte
 
         /*CacheCleanerTask cacheCleanerTask = new CacheCleanerTask(this, !CONFIG_CACHE_IMAGES);
         cacheCleanerTask.execute(this.listToArray(this.packageFileNames));*/
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = this.getMenuInflater();
+        inflater.inflate(R.menu.menu_main, menu);
+
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch(item.getItemId()) {
+            case R.id.menuMainInformation:
+                Intent intent = new Intent(this, InfoActivity.class);
+                this.startActivity(intent);
+                break;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
