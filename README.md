@@ -3,8 +3,7 @@ GardenGnomeViewer is a simple offline viewer app for displaying GGPKG files gene
 
 Typical use scenarios are the use as showcase for photographers or on exhibitions to display your greatest panorama experiences!
 
-![Screenshot](examples/Screenshot1.png)
-![Screenshot](examples/Screenshot2.png)
+![Screenshot](examples/Screenshot1.png) ![Screenshot](examples/Screenshot2.png)
 
 *Note:* This is not a official project from [GardenGnome Software](https://www.ggnome.com)!
 
