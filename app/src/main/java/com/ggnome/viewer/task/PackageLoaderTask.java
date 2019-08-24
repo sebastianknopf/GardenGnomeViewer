@@ -3,6 +3,7 @@ package com.ggnome.viewer.task;
 import android.content.Context;
 import android.os.AsyncTask;
 
+import com.ggnome.viewer.common.StorageConstants;
 import com.ggnome.viewer.helper.GardenGnomePackage;
 
 /**
@@ -23,7 +24,7 @@ public class PackageLoaderTask extends AsyncTask<String, Integer, GardenGnomePac
             this.publishProgress(0);
 
             GardenGnomePackage gardenGnomePackage = new GardenGnomePackage(packageFileNames[0]);
-            gardenGnomePackage.open(this.context.getCacheDir().getAbsolutePath(), new GardenGnomePackage.OpenProgressListener() {
+            gardenGnomePackage.open(this.context.getDir(StorageConstants.GGPKG_DIRECTORY, Context.MODE_PRIVATE).getAbsolutePath(), new GardenGnomePackage.OpenProgressListener() {
                 @Override
                 public void onOpenProgressUpdated(int progress) {
                     publishProgress(progress);

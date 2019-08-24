@@ -1,6 +1,5 @@
 package com.ggnome.viewer.helper;
 
-
 import org.json.JSONObject;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
@@ -73,7 +72,7 @@ public final class GardenGnomePackage implements Closeable {
     @Override
     public void close() {
         if(this.isOpen) {
-            File cleanDirectory = new File(this.packageDirectory, "ggpkg");
+            File cleanDirectory = new File(this.packageDirectory);
             this.cleanUpDirectory(cleanDirectory);
 
             this.packageDirectory = null;
@@ -101,7 +100,7 @@ public final class GardenGnomePackage implements Closeable {
     public void open(String packageDirectory, OpenProgressListener progressListener) throws IOException {
         this.packageDirectory = packageDirectory;
 
-        File targetDirectory = new File(this.packageDirectory, "ggpkg");
+        File targetDirectory = new File(this.packageDirectory);
         if(!targetDirectory.exists()) {
             targetDirectory.mkdirs();
         }
@@ -291,11 +290,15 @@ public final class GardenGnomePackage implements Closeable {
      * @param startDirectory The directory to handle.
      */
     private void cleanUpDirectory(File startDirectory) {
-        for(File object : startDirectory.listFiles()) {
-            if(object.isDirectory()) {
-                this.cleanUpDirectory(object);
-            } else {
-                object.delete();
+        File[] files = startDirectory.listFiles();
+
+        if(files != null) {
+            for(File object : files) {
+                if(object.isDirectory()) {
+                    this.cleanUpDirectory(object);
+                } else {
+                    object.delete();
+                }
             }
         }
 

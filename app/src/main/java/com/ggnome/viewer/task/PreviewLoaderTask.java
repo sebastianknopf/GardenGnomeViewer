@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 
+import com.ggnome.viewer.common.StorageConstants;
 import com.ggnome.viewer.helper.GardenGnomePackage;
 
 import java.io.File;
@@ -39,7 +40,7 @@ public class PreviewLoaderTask extends AsyncTask<String, Void, Bitmap> {
         // try to load preview image from cache
         // load from package only if there's no cached image
         String fileName = this.getFileNameWithoutExtension(packageFileName[0]);
-        File cachedPreviewImage = new File(new File(this.context.getCacheDir(), "preview"), fileName + ".jpg");
+        File cachedPreviewImage = new File(new File(this.context.getCacheDir(), StorageConstants.PREVIEW_DIRECTORY), fileName + ".jpg");
         if(cachedPreviewImage.exists()) {
             resultBitmap = BitmapFactory.decodeFile(cachedPreviewImage.getAbsolutePath());
             return resultBitmap;

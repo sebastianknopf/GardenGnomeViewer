@@ -1,5 +1,6 @@
 package com.ggnome.viewer;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -12,7 +13,7 @@ import android.webkit.WebResourceResponse;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
-import com.ggnome.viewer.common.CacheStoragePathHandler;
+import com.ggnome.viewer.common.StoragePathHandler;
 import com.ggnome.viewer.databinding.ActivityViewerBinding;
 import com.ggnome.viewer.helper.GardenGnomePackage;
 import com.ggnome.viewer.task.PackageLoaderTask;
@@ -66,7 +67,7 @@ public class ViewerActivity extends AppCompatActivity {
         }
 
         final WebViewAssetLoader webViewAssetLoader = new WebViewAssetLoader.Builder()
-                .addPathHandler("/ggpkg/", new CacheStoragePathHandler(this, "ggpkg"))
+                .addPathHandler("/ggpkg/", new StoragePathHandler(this.getDir("ggpkg", Context.MODE_PRIVATE).getAbsolutePath()))
                 .build();
 
         this.activityViewerBinding.viewerPanel.setWebViewClient(new WebViewClient() {
