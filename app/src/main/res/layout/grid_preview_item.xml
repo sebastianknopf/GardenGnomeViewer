@@ -5,11 +5,9 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingBottom="4dp"
         android:focusable="true"
         android:clickable="true"
-        android:foreground="?android:attr/selectableItemBackground"
-        android:background="@drawable/shape_grid_item_background">
+        android:foreground="?android:attr/selectableItemBackground">
 
         <ImageView
             android:id="@+id/imgPreviewImage"
@@ -32,14 +30,14 @@
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintBottom_toBottomOf="parent" />
 
-        <TextView
+        <!--<TextView
             android:id="@+id/lblPreviewName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
-            app:layout_constraintTop_toBottomOf="@id/imgPreviewImage" />
+            app:layout_constraintTop_toBottomOf="@id/imgPreviewImage" />-->
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

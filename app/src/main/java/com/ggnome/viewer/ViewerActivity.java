@@ -12,6 +12,7 @@ import android.webkit.WebResourceRequest;
 import android.webkit.WebResourceResponse;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.Toast;
 
 import com.ggnome.viewer.common.StoragePathHandler;
 import com.ggnome.viewer.databinding.ActivityViewerBinding;
@@ -184,6 +185,8 @@ public class ViewerActivity extends AppCompatActivity {
                 | View.SYSTEM_UI_FLAG_FULLSCREEN
         );
 
+        // display user info
+        Toast.makeText(this, R.string.activity_viewer_package_fullscreen_toast, Toast.LENGTH_LONG).show();
 
         // keep layout resizing for system bars
         this.activityViewerBinding.fitSystemWindowsLayout.setFit(false);

@@ -36,6 +36,8 @@ public class MainActivity extends AppCompatActivity implements GridPreviewAdapte
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        this.setTheme(R.style.AppTheme);
+
         super.onCreate(savedInstanceState);
         this.activityMainBinding = DataBindingUtil.setContentView(this, R.layout.activity_main);
 

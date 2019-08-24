@@ -1,5 +1,9 @@
 <resources>
 
+    <style name="LauncherTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="android:windowBackground">@drawable/launcher_background</item>
+    </style>
+
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
 
         <item name="colorPrimary">@color/colorPrimary</item>
@@ -7,6 +11,7 @@
         <item name="colorAccent">@color/colorAccent</item>
 
         <item name="android:buttonStyle">@style/ButtonStyle</item>
+
     </style>
 
     <style name="ButtonStyle" parent="Widget.AppCompat.Button.Colored">

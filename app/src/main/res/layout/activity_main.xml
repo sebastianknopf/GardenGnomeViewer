@@ -22,12 +22,6 @@
             android:orientation="vertical"
             android:visibility="gone">
 
-            <ImageView
-                android:layout_width="@dimen/activity_app_icon"
-                android:layout_height="@dimen/activity_app_icon"
-                android:layout_gravity="center"
-                android:src="@drawable/gdroid_search" />
-
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

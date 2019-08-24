@@ -12,7 +12,6 @@ import com.ggnome.viewer.R;
 import com.ggnome.viewer.databinding.GridPreviewItemBinding;
 import com.ggnome.viewer.task.PreviewLoaderTask;
 
-import java.io.File;
 import java.util.List;
 
 import androidx.databinding.DataBindingUtil;
@@ -51,7 +50,7 @@ public final class GridPreviewAdapter extends RecyclerView.Adapter<RecyclerView.
                 viewHolder.gridPreviewItemBinding.imgPreviewImage.setColorFilter(Color.TRANSPARENT);
                 viewHolder.gridPreviewItemBinding.imgPreviewImage.setScaleType(ImageView.ScaleType.CENTER_CROP);
 
-                viewHolder.gridPreviewItemBinding.lblPreviewName.setText(getPreviewDisplayName(packageFileList.get(position)));
+                //viewHolder.gridPreviewItemBinding.lblPreviewName.setText(getPreviewDisplayName(packageFileList.get(position)));
 
                 viewHolder.gridPreviewItemBinding.pgbLoading.setVisibility(View.GONE);
             }
@@ -79,7 +78,7 @@ public final class GridPreviewAdapter extends RecyclerView.Adapter<RecyclerView.
      * @param packageFileName The original package file name.
      * @return The clean version of package name.
      */
-    private String getPreviewDisplayName(String packageFileName) {
+    /*private String getPreviewDisplayName(String packageFileName) {
         File packageFile = new File(packageFileName);
 
         String previewDisplayName = packageFile.getName();
@@ -94,7 +93,7 @@ public final class GridPreviewAdapter extends RecyclerView.Adapter<RecyclerView.
         } else {
             return previewDisplayName.substring(0, extPos);
         }
-    }
+    }*/
 
     /**
      * Interface for interacting with preview clicks.
