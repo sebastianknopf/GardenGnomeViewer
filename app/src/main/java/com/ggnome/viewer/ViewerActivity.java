@@ -31,6 +31,7 @@ public class ViewerActivity extends AppCompatActivity {
     private PackageLoaderTask packageLoaderTask;
     private GardenGnomePackage gardenGnomePackage;
     private boolean isFullscreenMode = false;
+    private boolean isDataLoaded = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
