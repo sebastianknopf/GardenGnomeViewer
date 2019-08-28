@@ -16,7 +16,7 @@
 
     <!-- ViewerActivity -->
     <string name="activity_viewer_menu_fullscreen_title">Fullscreen</string>
-    <string name="activity_viewer_package_error">Beim Laden des Viewers ist ein Fehler aufgetreten!</string>
+    <string name="activity_viewer_package_error">Leider ist beim Laden des Viewers ein Fehler aufgetreten! Am besten versuchst Du es noch einmal.</string>
     <string name="activity_viewer_package_fullscreen_toast">Drücke die Zurück-Taste, um den Vollbildmodus zu beenden!</string>
 
     <!-- InfoActivity -->

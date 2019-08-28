@@ -168,6 +168,8 @@ public class ViewerActivity extends AppCompatActivity {
                 finish();
             }
         });
+
+        builder.show();
     }
 
     /**
