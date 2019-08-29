@@ -24,10 +24,13 @@
             android:configChanges="orientation|screenSize">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
-
                 <category android:name="android.intent.category.DEFAULT" />
 
+                <data android:scheme="file" />
+                <data android:scheme="content" />
+
                 <data android:mimeType="application/com.ggnome.ggpkg" />
+                <data android:mimeType="*/*" />
             </intent-filter>
         </activity>
 

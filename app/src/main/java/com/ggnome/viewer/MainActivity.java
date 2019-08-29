@@ -101,12 +101,10 @@ public class MainActivity extends AppCompatActivity implements GridPreviewAdapte
     // event handler
     @Override
     public void onItemClick(int position, String packageFileName) {
-        /*Intent intent = new Intent(this, ViewerActivity.class);
-        intent.putExtra("EXTRA_PACKAGE_FILE_NAME", packageFileName);*/
-
         Uri packageFileUri = Uri.fromFile(new File(packageFileName));
         Intent intent = new Intent(Intent.ACTION_VIEW);
         intent.setDataAndType(packageFileUri, "application/com.ggnome.ggpkg");
+        intent.putExtra(ViewerActivity.EXTRA_ENABLE_BACKWARDS_NAVIGATION, true);
 
         this.startActivity(intent);
     }

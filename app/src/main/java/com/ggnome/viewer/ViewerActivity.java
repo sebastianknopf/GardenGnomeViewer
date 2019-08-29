@@ -2,8 +2,10 @@ package com.ggnome.viewer;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.database.Cursor;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -26,6 +28,8 @@ import androidx.webkit.WebViewAssetLoader;
 
 public class ViewerActivity extends AppCompatActivity {
 
+    public static String EXTRA_ENABLE_BACKWARDS_NAVIGATION = "EXTRA_ENABLE_BACKWARDS_NAVIGATION";
+
     private ActivityViewerBinding activityViewerBinding;
 
     private PackageLoaderTask packageLoaderTask;
@@ -39,7 +43,26 @@ public class ViewerActivity extends AppCompatActivity {
         this.activityViewerBinding = DataBindingUtil.setContentView(this, R.layout.activity_viewer);
 
         if(this.getIntent() != null) {
-            String packageFileName = this.getIntent().getData().getPath();
+            // enable backwards navigation only when started from application context
+            if(this.getIntent().getBooleanExtra(EXTRA_ENABLE_BACKWARDS_NAVIGATION, false)) {
+                if(this.getSupportActionBar() != null) {
+                    this.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+                }
+            }
+
+            // load file from intent
+            String packageFileName = null;
+            if(this.getIntent().getData() != null && this.getIntent().getData().getScheme().equals("file")) {
+                packageFileName = this.getIntent().getData().getPath();
+            } else if(this.getIntent().getData() != null && this.getIntent().getData().getScheme().equals("content")) {
+                // transform content uri into file uri
+                Cursor cursor = this.getContentResolver().query(this.getIntent().getData(), new String[] { MediaStore.Files.FileColumns.DATA }, null, null, null);
+                if(cursor.moveToFirst()) {
+                    packageFileName = cursor.getString(cursor.getColumnIndex(MediaStore.Files.FileColumns.DATA));
+                }
+                cursor.close();
+            }
+
             if(packageFileName != null) {
                 this.packageLoaderTask = new PackageLoaderTask(this);
                 this.packageLoaderTask.setLoaderTaskListener(new PackageLoaderTask.PackageLoaderTaskListener() {
@@ -61,11 +84,9 @@ public class ViewerActivity extends AppCompatActivity {
                 });
 
                 this.packageLoaderTask.execute(packageFileName);
+            } else {
+                this.showErrorAlert();
             }
-        }
-
-        if(this.getSupportActionBar() != null) {
-            this.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
 
         final WebViewAssetLoader webViewAssetLoader = new WebViewAssetLoader.Builder()
@@ -88,7 +109,7 @@ public class ViewerActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
 
-        if(this.packageLoaderTask.getStatus() == AsyncTask.Status.RUNNING || this.packageLoaderTask.getStatus() == AsyncTask.Status.PENDING) {
+        if(this.packageLoaderTask != null && (this.packageLoaderTask.getStatus() == AsyncTask.Status.RUNNING || this.packageLoaderTask.getStatus() == AsyncTask.Status.PENDING)) {
             this.packageLoaderTask.cancel(true);
         }
 
