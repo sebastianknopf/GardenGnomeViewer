@@ -56,9 +56,11 @@ public class ViewerActivity extends AppCompatActivity {
                 packageFileName = this.getIntent().getData().getPath();
             } else if(this.getIntent().getData() != null && this.getIntent().getData().getScheme().equals("content")) {
                 // transform content uri into file uri
-                Cursor cursor = this.getContentResolver().query(this.getIntent().getData(), new String[] { MediaStore.Files.FileColumns.DATA }, null, null, null);
+                Cursor cursor = this.getContentResolver().query(this.getIntent().getData(), new String[] { MediaStore.Files.FileColumns.DATA, MediaStore.Files.FileColumns.DISPLAY_NAME }, null, null, null);
                 if(cursor.moveToFirst()) {
-                    packageFileName = cursor.getString(cursor.getColumnIndex(MediaStore.Files.FileColumns.DATA));
+                    if(cursor.getString(cursor.getColumnIndex(MediaStore.Files.FileColumns.DISPLAY_NAME)).endsWith(".ggpkg")) {
+                        packageFileName = cursor.getString(cursor.getColumnIndex(MediaStore.Files.FileColumns.DATA));
+                    }
                 }
                 cursor.close();
             }
