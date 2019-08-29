@@ -175,8 +175,9 @@ public class MainActivity extends AppCompatActivity implements GridPreviewAdapte
 
             String[] queryProjection = new String[]{MediaStore.Files.FileColumns._ID, MediaStore.Files.FileColumns.DATA, MediaStore.Files.FileColumns.MIME_TYPE};
             String querySelection = "_data LIKE '%.ggpkg'";
+            String sortOrder = MediaStore.Files.FileColumns.DATE_MODIFIED + " DESC";
 
-            Cursor cursor = contentResolver.query(contentUri, queryProjection, querySelection, null, null);
+            Cursor cursor = contentResolver.query(contentUri, queryProjection, querySelection, null, sortOrder);
             if(cursor.moveToFirst()) {
                 this.packageFileNames.clear();
 
