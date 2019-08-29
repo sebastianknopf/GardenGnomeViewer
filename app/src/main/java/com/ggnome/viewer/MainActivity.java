@@ -16,6 +16,7 @@ import android.view.View;
 
 import com.ggnome.viewer.adapter.GridPreviewAdapter;
 import com.ggnome.viewer.databinding.ActivityMainBinding;
+import com.ggnome.viewer.helper.GardenGnomeCleanerService;
 import com.ggnome.viewer.view.GridViewItemSpacingDecoration;
 
 import java.io.File;
@@ -52,6 +53,10 @@ public class MainActivity extends AppCompatActivity implements GridPreviewAdapte
         this.activityMainBinding.contentPreviewPanel.setLayoutManager(new GridLayoutManager(this, spanCount));
         this.activityMainBinding.contentPreviewPanel.addItemDecoration(new GridViewItemSpacingDecoration(spanCount, 16));
         this.activityMainBinding.contentPreviewPanel.setAdapter(this.gridPreviewAdapter);
+
+        // start cleaner service to perform memory cleanup after application exit
+        Intent cleanerServiceIntent = new Intent(this, GardenGnomeCleanerService.class);
+        this.startService(cleanerServiceIntent);
     }
 
     @Override

@@ -33,10 +33,14 @@
                 <data android:mimeType="*/*" />
             </intent-filter>
         </activity>
-
         <activity
             android:name=".InfoActivity"
             android:label="@string/activity_info_title" />
+
+        <service
+            android:name=".helper.GardenGnomeCleanerService"
+            android:stopWithTask="false" />
+
     </application>
 
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
