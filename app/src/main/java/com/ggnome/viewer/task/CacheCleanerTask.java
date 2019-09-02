@@ -3,6 +3,8 @@ package com.ggnome.viewer.task;
 import android.content.Context;
 import android.os.AsyncTask;
 
+import com.ggnome.viewer.common.StorageConstants;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -31,7 +33,7 @@ public final class CacheCleanerTask extends AsyncTask<String, Void, Void> {
         // in non-strict mode delete only those files, which
         // are NOT contained in the passed package file names
         if(this.strictMode) {
-            File cacheDirectory = new File(this.context.getCacheDir(), "preview");
+            File cacheDirectory = new File(this.context.getCacheDir(), StorageConstants.PREVIEW_DIRECTORY);
             for(File cachedFile : cacheDirectory.listFiles()) {
                 cachedFile.delete();
             }

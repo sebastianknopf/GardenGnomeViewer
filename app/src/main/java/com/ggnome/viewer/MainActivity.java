@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -17,6 +18,7 @@ import android.view.View;
 import com.ggnome.viewer.adapter.GridPreviewAdapter;
 import com.ggnome.viewer.databinding.ActivityMainBinding;
 import com.ggnome.viewer.helper.GardenGnomeCleanerService;
+import com.ggnome.viewer.task.CacheCleanerTask;
 import com.ggnome.viewer.view.GridViewItemSpacingDecoration;
 
 import java.io.File;
@@ -36,6 +38,7 @@ public class MainActivity extends AppCompatActivity implements GridPreviewAdapte
     private ActivityMainBinding activityMainBinding;
 
     private List<String> packageFileNames;
+    private CacheCleanerTask cacheCleanerTask;
     private GridPreviewAdapter gridPreviewAdapter;
 
     @Override
@@ -67,11 +70,12 @@ public class MainActivity extends AppCompatActivity implements GridPreviewAdapte
     }
 
     @Override
-    protected void onStop() {
-        super.onStop();
+    protected void onDestroy() {
+        super.onDestroy();
 
-        /*CacheCleanerTask cacheCleanerTask = new CacheCleanerTask(this, !CONFIG_CACHE_IMAGES);
-        cacheCleanerTask.execute(this.listToArray(this.packageFileNames));*/
+        if(this.cacheCleanerTask != null && (this.cacheCleanerTask.getStatus() == AsyncTask.Status.RUNNING || this.cacheCleanerTask.getStatus() == AsyncTask.Status.PENDING)) {
+            this.cacheCleanerTask.cancel(true);
+        }
     }
 
     @Override
@@ -157,7 +161,6 @@ public class MainActivity extends AppCompatActivity implements GridPreviewAdapte
      */
     private void initializeActivityView() {
         if(ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-
             this.showPermissionErrorPanel();
         } else {
             if(this.loadPackageNames()) {
@@ -190,12 +193,32 @@ public class MainActivity extends AppCompatActivity implements GridPreviewAdapte
                     filesLast = cursor.moveToNext();
                 }
 
+                // clear cache images of non-existing packages
+                this.cacheCleanerTask = new CacheCleanerTask(this);
+                this.cacheCleanerTask.execute(this.listToArray(this.packageFileNames));
+
                 this.gridPreviewAdapter.notifyDataSetChanged();
                 return true;
             }
         }
 
         return false;
+    }
+
+    /**
+     * Converts a list into an array.
+     *
+     * @param inputList The input string list.
+     * @return String array with contents of list.
+     */
+    private String[] listToArray(List<String> inputList) {
+        String[] outputArray = new String[inputList.size()];
+
+        for(int s = 0; s < inputList.size(); s++) {
+            outputArray[s] = inputList.get(s);
+        }
+
+        return outputArray;
     }
 
 }
