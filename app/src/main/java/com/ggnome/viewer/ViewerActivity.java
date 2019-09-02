@@ -2,7 +2,9 @@ package com.ggnome.viewer;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.database.Cursor;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -49,45 +51,8 @@ public class ViewerActivity extends AppCompatActivity {
                 }
             }
 
-            // load file from intent
-            String packageFileName = null;
-            if(this.getIntent().getData() != null && this.getIntent().getData().getScheme().equals("file")) {
-                packageFileName = this.getIntent().getData().getPath();
-            } else if(this.getIntent().getData() != null && this.getIntent().getData().getScheme().equals("content")) {
-                // transform content uri into file uri
-                Cursor cursor = this.getContentResolver().query(this.getIntent().getData(), new String[] { MediaStore.Files.FileColumns.DATA, MediaStore.Files.FileColumns.DISPLAY_NAME }, null, null, null);
-                if(cursor.moveToFirst()) {
-                    if(cursor.getString(cursor.getColumnIndex(MediaStore.Files.FileColumns.DISPLAY_NAME)).endsWith(".ggpkg")) {
-                        packageFileName = cursor.getString(cursor.getColumnIndex(MediaStore.Files.FileColumns.DATA));
-                    }
-                }
-                cursor.close();
-            }
-
-            if(packageFileName != null) {
-                this.packageLoaderTask = new PackageLoaderTask(this);
-                this.packageLoaderTask.setLoaderTaskListener(new PackageLoaderTask.PackageLoaderTaskListener() {
-                    @Override
-                    public void onPackageLoaded(GardenGnomePackage packageObject) {
-                        gardenGnomePackage = packageObject;
-
-                        if(gardenGnomePackage != null) {
-                            showViewerPanel();
-                        } else {
-                            showErrorAlert();
-                        }
-                    }
-
-                    @Override
-                    public void onPackageProgressUpdate(int progressValue) {
-                        updateProgress(progressValue);
-                    }
-                });
-
-                this.packageLoaderTask.execute(packageFileName);
-            } else {
-                this.showErrorAlert();
-            }
+            // load package on first activity creation
+            this.loadPackageFile(this.getIntent().getData());
         }
 
         final WebViewAssetLoader webViewAssetLoader = new WebViewAssetLoader.Builder()
@@ -104,6 +69,24 @@ public class ViewerActivity extends AppCompatActivity {
         this.activityViewerBinding.viewerPanel.getSettings().setJavaScriptEnabled(true);
 
         this.showLoadingPanel();
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+
+        // load package file when new intent is set to activity
+        if(this.getIntent() != null) {
+            // enable backwards navigation only when started from application context
+            if(this.getIntent().getBooleanExtra(EXTRA_ENABLE_BACKWARDS_NAVIGATION, false)) {
+                if(this.getSupportActionBar() != null) {
+                    this.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+                }
+            }
+
+            // load package on first activity creation
+            this.loadPackageFile(this.getIntent().getData());
+        }
     }
 
     @Override
@@ -231,6 +214,52 @@ public class ViewerActivity extends AppCompatActivity {
         // keep layout resizing for system bars
         this.activityViewerBinding.fitSystemWindowsLayout.setFit(true);
         this.isFullscreenMode = false;
+    }
+
+    /**
+     * Loads an GGPKG file based on a URI.
+     *
+     * @param uri The URI of the file to load.
+     */
+    private void loadPackageFile(Uri uri) {
+        String packageFileName = null;
+        if(uri != null && uri.getScheme().equals("file")) {
+            packageFileName = this.getIntent().getData().getPath();
+        } else if(uri != null && uri.getScheme().equals("content")) {
+            // transform content uri into file uri
+            Cursor cursor = this.getContentResolver().query(uri, new String[] { MediaStore.Files.FileColumns.DATA, MediaStore.Files.FileColumns.DISPLAY_NAME }, null, null, null);
+            if(cursor.moveToFirst()) {
+                if(cursor.getString(cursor.getColumnIndex(MediaStore.Files.FileColumns.DISPLAY_NAME)).endsWith(".ggpkg")) {
+                    packageFileName = cursor.getString(cursor.getColumnIndex(MediaStore.Files.FileColumns.DATA));
+                }
+            }
+            cursor.close();
+        }
+
+        if(packageFileName != null) {
+            this.packageLoaderTask = new PackageLoaderTask(this);
+            this.packageLoaderTask.setLoaderTaskListener(new PackageLoaderTask.PackageLoaderTaskListener() {
+                @Override
+                public void onPackageLoaded(GardenGnomePackage packageObject) {
+                    gardenGnomePackage = packageObject;
+
+                    if(gardenGnomePackage != null) {
+                        showViewerPanel();
+                    } else {
+                        showErrorAlert();
+                    }
+                }
+
+                @Override
+                public void onPackageProgressUpdate(int progressValue) {
+                    updateProgress(progressValue);
+                }
+            });
+
+            this.packageLoaderTask.execute(packageFileName);
+        } else {
+            this.showErrorAlert();
+        }
     }
 
     /**
