@@ -13,6 +13,9 @@ Typical use scenarios are the use as showcase for photographers or on exhibition
                     - optimization of behaviour on orientation change
                     - nicer launcher icon and logos
                     - ability to open ViewerActivity via content uri
+* Version 1.0.2:    - added permission for accessing internet
+                    - improved behaviour of ViewerActivity on singleTask instances
+                    - implemented CacheCleanerTask to clean up any temporary files                    
 
 ## System Requirements
 * Android >= API 21
