@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <PreferenceCategory
+        app:title="@string/preference_screen_category_player"
+        app:iconSpaceReserved="false">
+
+        <CheckBoxPreference
+            app:key="prefEnableFullscreen"
+            app:title="@string/preference_screen_fullscreen_title"
+            app:iconSpaceReserved="false"
+            app:defaultValue="true" />
+
+        <CheckBoxPreference
+            app:key="prefEnableGyroscope"
+            app:title="@string/preference_screen_gyro_title"
+            app:iconSpaceReserved="false"
+            app:defaultValue="false" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        app:title="@string/preference_screen_category_legacy"
+        app:iconSpaceReserved="false">
+
+        <Preference
+            app:key="prefInformation"
+            app:title="@string/activity_info_title"
+            app:iconSpaceReserved="false"
+            app:persistent="false" />
+
+    </PreferenceCategory>
+
+</PreferenceScreen>

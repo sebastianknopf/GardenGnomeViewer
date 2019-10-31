@@ -89,8 +89,8 @@ public class MainActivity extends AppCompatActivity implements GridPreviewAdapte
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch(item.getItemId()) {
-            case R.id.menuMainInformation:
-                Intent intent = new Intent(this, InfoActivity.class);
+            case R.id.menuMainSettings:
+                Intent intent = new Intent(this, SettingsActivity.class);
                 this.startActivity(intent);
                 break;
         }
