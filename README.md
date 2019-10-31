@@ -15,7 +15,8 @@ Typical use scenarios are the use as showcase for photographers or on exhibition
                     - ability to open ViewerActivity via content uri
 * Version 1.0.2:    - added permission for accessing internet
                     - improved behaviour of ViewerActivity on singleTask instances
-                    - implemented CacheCleanerTask to clean up any temporary files                    
+                    - implemented CacheCleanerTask to clean up any temporary files 
+* Version 1.1.0:    - introduced SettingsActivity and SettingsManager                  
 
 ## System Requirements
 * Android >= API 21
