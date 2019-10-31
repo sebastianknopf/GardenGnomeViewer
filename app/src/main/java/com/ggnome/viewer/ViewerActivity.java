@@ -18,6 +18,7 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Toast;
 
+import com.ggnome.viewer.common.SettingsManager;
 import com.ggnome.viewer.common.StoragePathHandler;
 import com.ggnome.viewer.databinding.ActivityViewerBinding;
 import com.ggnome.viewer.helper.GardenGnomePackage;
@@ -55,6 +56,7 @@ public class ViewerActivity extends AppCompatActivity {
             this.loadPackageFile(this.getIntent().getData());
         }
 
+        // init web view component with local asset loader
         final WebViewAssetLoader webViewAssetLoader = new WebViewAssetLoader.Builder()
                 .addPathHandler("/ggpkg/", new StoragePathHandler(this.getDir("ggpkg", Context.MODE_PRIVATE).getAbsolutePath()))
                 .build();
@@ -115,6 +117,14 @@ public class ViewerActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = this.getMenuInflater();
         inflater.inflate(R.menu.menu_viewer, menu);
+
+        // enable / disable menu items depending on settings
+        SettingsManager settingsManager = SettingsManager.getInstance(this);
+
+        MenuItem fullscreenMenuItem = menu.findItem(R.id.menuViewerFullscreen);
+        if(fullscreenMenuItem != null) {
+            fullscreenMenuItem.setVisible(settingsManager.getFullscreenEnabled());
+        }
 
         return true;
     }

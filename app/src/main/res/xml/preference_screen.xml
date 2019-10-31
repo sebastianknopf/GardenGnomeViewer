@@ -11,11 +11,12 @@
             app:iconSpaceReserved="false"
             app:defaultValue="true" />
 
-        <CheckBoxPreference
+        <!-- This is for next app versions -->
+        <!--<CheckBoxPreference
             app:key="prefEnableGyroscope"
             app:title="@string/preference_screen_gyro_title"
             app:iconSpaceReserved="false"
-            app:defaultValue="false" />
+            app:defaultValue="false" />-->
 
     </PreferenceCategory>
 
