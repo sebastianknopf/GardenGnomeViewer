@@ -34,15 +34,5 @@ is to take a look into the latest enhancements and take a short look over the so
 the existing code, to keep the project clean and easy to maintain. If you've any questions left, you can
 contact me via my profile or write an email to [mail@sebastian-knopf.de](mailto:mail@sebastian-knopf.de).
 
-To call the ViewerActivity from your own application, you can send an intent with file - / content uri containing
-a reference to the GGPKG file to open. See this code snippet as little cheat-sheet:
-
-```
-Uri packageFileUri = Uri.fromFile(new File(packageFileName));               // create uri from whatever you want
-Intent intent = new Intent(Intent.ACTION_VIEW);                             // default action = VIEW
-intent.setDataAndType(packageFileUri, "application/com.ggnome.ggpkg");      // important: use MIME type application/com.ggnome.ggpkg!!!
-this.startActivity(intent);                                                 // and let's go ... :-)
-```
-
 ## License
 This project is licensed under the Apache 2.0 license. See [LICENSE.md](LICENSE.md) for more information.
