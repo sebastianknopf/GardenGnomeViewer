@@ -21,7 +21,6 @@ import com.ggnome.viewer.helper.GardenGnomeCleanerService;
 import com.ggnome.viewer.task.CacheCleanerTask;
 import com.ggnome.viewer.view.GridViewItemSpacingDecoration;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -110,9 +109,11 @@ public class MainActivity extends AppCompatActivity implements GridPreviewAdapte
     // event handler
     @Override
     public void onItemClick(int position, String packageFileName) {
-        Uri packageFileUri = Uri.fromFile(new File(packageFileName));
-        Intent intent = new Intent(Intent.ACTION_VIEW);
-        intent.setDataAndType(packageFileUri, "application/com.ggnome.ggpkg");
+        //Uri packageFileUri = Uri.fromFile(new File(packageFileName));
+
+        Intent intent = new Intent(this, ViewerActivity.class);
+        //intent.setDataAndType(packageFileUri, "application/com.ggnome.ggpkg");
+        intent.putExtra(ViewerActivity.EXTRA_FILE_NAME, packageFileName);
         intent.putExtra(ViewerActivity.EXTRA_ENABLE_BACKWARDS_NAVIGATION, true);
 
         this.startActivity(intent);

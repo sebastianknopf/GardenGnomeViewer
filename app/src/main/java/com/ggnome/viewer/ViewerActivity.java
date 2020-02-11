@@ -24,6 +24,8 @@ import com.ggnome.viewer.databinding.ActivityViewerBinding;
 import com.ggnome.viewer.helper.GardenGnomePackage;
 import com.ggnome.viewer.task.PackageLoaderTask;
 
+import java.io.File;
+
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
@@ -32,6 +34,8 @@ import androidx.webkit.WebViewAssetLoader;
 public class ViewerActivity extends AppCompatActivity {
 
     public static String EXTRA_ENABLE_BACKWARDS_NAVIGATION = "EXTRA_ENABLE_BACKWARDS_NAVIGATION";
+    public static String EXTRA_FILE_NAME = "EXTRA_FILE_NAME";
+    public static String EXTRA_MIME_TYPE = "EXTRA_MIME_TYPE";
 
     private ActivityViewerBinding activityViewerBinding;
 
@@ -53,7 +57,8 @@ public class ViewerActivity extends AppCompatActivity {
             }
 
             // load package on first activity creation
-            this.loadPackageFile(this.getIntent().getData());
+            Uri fileUri = Uri.fromFile(new File(this.getIntent().getStringExtra(EXTRA_FILE_NAME)));
+            this.loadPackageFile(fileUri);
         }
 
         // init web view component with local asset loader
@@ -87,7 +92,8 @@ public class ViewerActivity extends AppCompatActivity {
             }
 
             // load package on first activity creation
-            this.loadPackageFile(this.getIntent().getData());
+            Uri fileUri = Uri.fromFile(new File(this.getIntent().getStringExtra(EXTRA_FILE_NAME)));
+            this.loadPackageFile(fileUri);
         }
     }
 
@@ -234,7 +240,7 @@ public class ViewerActivity extends AppCompatActivity {
     private void loadPackageFile(Uri uri) {
         String packageFileName = null;
         if(uri != null && uri.getScheme().equals("file")) {
-            packageFileName = this.getIntent().getData().getPath();
+            packageFileName = uri.getPath();
         } else if(uri != null && uri.getScheme().equals("content")) {
             // transform content uri into file uri
             Cursor cursor = this.getContentResolver().query(uri, new String[] { MediaStore.Files.FileColumns.DATA, MediaStore.Files.FileColumns.DISPLAY_NAME }, null, null, null);
