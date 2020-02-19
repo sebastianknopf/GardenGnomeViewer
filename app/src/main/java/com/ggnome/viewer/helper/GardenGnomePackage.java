@@ -239,7 +239,9 @@ public final class GardenGnomePackage implements Closeable {
             this.metaConfigName = ggInfo.getString("configuration");
             this.metaPreviewName = ggInfo.getJSONObject("preview").getString("img");
         } catch (Exception e) {
-            throw new RuntimeException("unable to read gginfo");
+            // assume preview name if the gginfo.json is not readable
+            this.metaPreviewName = "preview.jpg";
+            // throw new RuntimeException("unable to read gginfo");
         }
 
         this.metaLoaded = true;
